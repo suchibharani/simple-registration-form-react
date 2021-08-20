@@ -5,79 +5,89 @@ class Register extends React.Component {
     constructor(props){
         super(props);
         this.state ={
-            isValid : {
-                isUserNameValid : false,
-                isPswValid : false,
-                isCPswValid : false 
-            },
+            errors: {},
             username : "",
             password : "",
             confirmPassword : "",
-            
+            enableSubmit : true
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.isValidForm = this.isValidForm.bind(this);
     }
     isValidForm(){
-
+        var {username,password,confirmPassword } = this.state;
+        let errors = {};
+        if(username == "" || (username.length == 0 || username.length < 8)){
+            errors["name"] = true
+        }else{
+            errors["name"] = false
+        }
+        if(password  == "" ||  ( password.length == 0 || password.length < 8)){
+            errors["password"] = true
+        }else{
+            errors["password"] = false
+        }
+        if(confirmPassword  == "" || ( confirmPassword.length == 0 || confirmPassword != password)){
+            errors["confirmPassword"] = true
+        }else{
+            errors["confirmPassword"] = false
+        }
+        var formIsValid = Object.keys(errors).every(function(k){ return errors[k] === false });
+        
+        this.setState({errors : errors})
+        this.setState({enableSubmit : !formIsValid})
     }
+    
     handleChange(e){
-            console.log(e);
             var states = this.state
             if(e.target.name == "username"){
-                let uname = e.target.value;
-                this.setState({username : uname})
-                this.setState(prevState => {
-                    let validObj = Object.assign({},prevState.isValid )
-                    validObj.isUserNameValid = (uname && uname.length <= 8);
-                    return validObj;
-                })
+                this.setState({username : e.target.value})
             }
             if(e.target.name == "password"){
-                let psw = e.target.value;
                 this.setState({password : e.target.value})
-                this.setState(prevState => {
-                    let validObj = Object.assign({},prevState.isValid )
-                    validObj.isPswValid = (psw && psw.length <= 8);
-                    return validObj;
-                })
             }
             if(e.target.name == "confirmPassword"){
-                var cPsw = e.target.value;
-
                 this.setState({confirmPassword : e.target.value})
-                this.setState(prevState => {
-                    let validObj = Object.assign({},prevState.isValid )
-                    validObj.isPswValid = (cPsw && cPsw === states.confirmPassword);
-                    return validObj;
-                })
             }
+            setTimeout(
+                function() {
+                    this.isValidForm();
+                }
+                .bind(this),
+                1000
+            );
+            
                 
     }
 
     render(){
-        var {username,password,confirmPassword,isValid} = this.state;
+        var {username,password,confirmPassword,errors,enableSubmit} = this.state;
+    
         return (
             <div className="RegisterComponent">
                 <h1>
                     Please Register here
                 </h1>
+                <div className={`error ${errors && errors.confirmPassword ? "" : "hide"}`} > confirm password should be equal to the password
+</div>
+                <div className={`error ${errors && errors.password  ? "" : "hide"}`} >password should be 8 characters and above</div>
+                <div className={`error ${errors && errors.name ? "" : "hide"}`} > username must be 8 characters and above</div>
+               
                 <div className="mtb">
                     <input type="text" name="username" value={username} onChange={this.handleChange} />
-                    {username}
-                    <div className="error"> </div>
-                </div>
+                    
+                 </div>
                 <div className="mtb"> 
                     <input type="password" name="password" value={password} onChange={this.handleChange} />
-                    {password}
+                    
                 </div>
                 <div className="mtb">
                     <input type="text" name="confirmPassword" value={confirmPassword} onChange={this.handleChange} />
-                    {confirmPassword}
+                   
                 </div>
                 <div>
-                    <button value="submit" disabled="disabled"> Submit </button>
+                    <button value="submit" disabled={enableSubmit}> Submit </button>
                 </div>
             </div>
           );
