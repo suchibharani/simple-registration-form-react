@@ -68,3 +68,18 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+Requirement : 
+
+
+code a simple registration component with username, password, confirm password, register button, message div
+rules:
+username must be 8 characters and above
+password should be 8 characters and above
+confirm password should be equal to the password
+register button must only be enabled if all rules are satisfied
+error msg div at the top, show error msgs if any
+
+
+
+email ID : dccabacungan@gmail.com
